@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+/* KiddoCraft palette — sampled from the logo (sun yellow #FFC603, sky blue #048BDC)
+   and the magnetic tiles of the brand banner (coral, mint). */
+@theme {
+  --color-sun-50: #fff9e0;
+  --color-sun-100: #fff1b8;
+  --color-sun-200: #ffe478;
+  --color-sun-400: #ffc603;
+  --color-sun-500: #f2b400;
+  --color-sun-600: #d99c00;
+  --color-sun-700: #a87600;
+
+  --color-sky-50: #eaf6fe;
+  --color-sky-100: #cfeafc;
+  --color-sky-200: #9fd3f7;
+  --color-sky-400: #2fa3e8;
+  --color-sky-500: #048bdc;
+  --color-sky-600: #0372b6;
+  --color-sky-700: #035a8f;
+
+  --color-coral-50: #fdeeee;
+  --color-coral-100: #fbd5d5;
+  --color-coral-400: #f08a8a;
+  --color-coral-500: #e06464;
+  --color-coral-600: #c24848;
+
+  --color-mint-50: #e9f8ef;
+  --color-mint-100: #cdeed9;
+  --color-mint-400: #6cc996;
+  --color-mint-500: #3fae72;
+  --color-mint-600: #2e8c5a;
+
+  --color-ink: #1f2d3d;
+  --color-ink-soft: #4a5a6c;
+  --color-muted: #6b7a8c;
+  --color-line: #e7ecf2;
+  --color-cream: #fffdf6;
+  --color-cloud: #f4f9fd;
+
+  --font-display: var(--font-fredoka), var(--font-baloo), ui-rounded, system-ui, sans-serif;
+  --font-sans: var(--font-nunito), var(--font-baloo), ui-rounded, system-ui, sans-serif;
+
+  --radius-blob: 2rem;
+  --shadow-soft: 0 10px 30px -12px rgb(31 45 61 / 0.18);
+  --shadow-card: 0 2px 0 rgb(31 45 61 / 0.04), 0 12px 32px -16px rgb(31 45 61 / 0.25);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pop: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-slide-in: slide-in 0.3s ease-out;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+    50% { transform: translateY(-12px) rotate(var(--r, 0deg)); }
+  }
+  @keyframes pop {
+    0% { transform: scale(0.6); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes slide-in {
+    from { transform: translateY(12px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+}
+
+/* Arabic pages use the rounded Baloo Bhaijaan for everything. */
+[dir="rtl"] {
+  --font-display: var(--font-baloo), ui-rounded, system-ui, sans-serif;
+  --font-sans: var(--font-baloo), ui-rounded, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-sky-400);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+}
+
+@layer components {
+  /* Chunky "toy" buttons with a pressed state. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-display text-base font-semibold transition select-none disabled:opacity-60 disabled:pointer-events-none;
+    transform: translateY(0);
+  }
+  .btn:active { transform: translateY(2px); }
+  .btn-sun {
+    @apply bg-sun-400 text-ink hover:bg-sun-500;
+    box-shadow: 0 4px 0 var(--color-sun-600);
+  }
+  .btn-sun:active { box-shadow: 0 2px 0 var(--color-sun-600); }
+  .btn-sky {
+    @apply bg-sky-500 text-white hover:bg-sky-600;
+    box-shadow: 0 4px 0 var(--color-sky-700);
+  }
+  .btn-sky:active { box-shadow: 0 2px 0 var(--color-sky-700); }
+  .btn-ghost {
+    @apply border-2 border-line bg-white text-ink hover:border-sky-200 hover:bg-sky-50;
+  }
+  .btn-sm { @apply px-4 py-2 text-sm; }
+
+  .card {
+    @apply rounded-3xl bg-white;
+    box-shadow: var(--shadow-card);
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold;
+  }
+
+  .field {
+    @apply w-full rounded-2xl border-2 border-line bg-white px-4 py-3 text-base text-ink placeholder:text-muted/70 transition outline-none focus:border-sky-400 focus:ring-4 focus:ring-sky-100;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-bold text-ink-soft;
+  }
+
+  .section-title {
+    @apply font-display text-3xl font-semibold text-ink sm:text-4xl;
+  }
+
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Rich text (product descriptions, blog posts) rendered from Markdown. */
+  .prose-kc { @apply text-[1.0625rem] leading-relaxed text-ink-soft; }
+  .prose-kc > * + * { @apply mt-4; }
+  .prose-kc h2 { @apply mt-10 font-display text-2xl font-semibold text-ink; }
+  .prose-kc h3 { @apply mt-8 font-display text-xl font-semibold text-ink; }
+  .prose-kc ul { @apply list-disc ps-6 marker:text-sun-500; }
+  .prose-kc ol { @apply list-decimal ps-6 marker:font-bold marker:text-sky-500; }
+  .prose-kc li + li { @apply mt-1.5; }
+  .prose-kc a { @apply font-semibold text-sky-600 underline decoration-sky-200 decoration-2 underline-offset-4 hover:decoration-sky-500; }
+  .prose-kc strong { @apply font-bold text-ink; }
+  .prose-kc blockquote { @apply rounded-2xl border-s-4 border-sun-400 bg-sun-50 px-5 py-4 text-ink; }
+  .prose-kc img { @apply rounded-2xl; }
+}
+
+/* Decorative magnetic tile used in hero and section backgrounds. */
+.tile {
+  --tile: var(--color-sky-400);
+  --tile-fill: var(--color-sky-100);
+  position: relative;
+  border: 0.3rem solid var(--tile);
+  background: var(--tile-fill);
+  border-radius: 0.6rem;
+}
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 30%;
+  border: 0.18rem solid rgb(255 255 255 / 0.85);
+  border-radius: 0.2rem;
+}
+.tile-sun { --tile: var(--color-sun-500); --tile-fill: var(--color-sun-200); }
+.tile-coral { --tile: var(--color-coral-500); --tile-fill: var(--color-coral-100); }
+.tile-mint { --tile: var(--color-mint-500); --tile-fill: var(--color-mint-100); }
+
+.sky-bg {
+  background:
+    radial-gradient(ellipse at 50% 120%, #d6efc6 0 32%, transparent 33%),
+    linear-gradient(180deg, #dcf0fc 0%, #f3f9fd 55%, #fff8e4 100%);
+}
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

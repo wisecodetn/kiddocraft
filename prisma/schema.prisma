@@ -1,0 +1,177 @@
+// KiddoCraft database.
+// Every piece of storefront content exists in French (primary, served at /) and Arabic (served at /ar),
+// stored side by side as *Fr / *Ar columns so the admin edits both languages in one form.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id        String  @id @default(cuid())
+  slugFr    String  @unique
+  slugAr    String  @unique
+  nameFr    String
+  nameAr    String
+  descFr    String  @default("")
+  descAr    String  @default("")
+  // SEO overrides; fall back to name/description when empty.
+  metaTitleFr String @default("")
+  metaTitleAr String @default("")
+  metaDescFr  String @default("")
+  metaDescAr  String @default("")
+  image     String?
+  // One of the brand accent names (yellow, blue, coral, green) used for cards.
+  color     String  @default("yellow")
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+  products  Product[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id             String   @id @default(cuid())
+  slugFr         String   @unique
+  slugAr         String   @unique
+  nameFr         String
+  nameAr         String
+  shortDescFr    String   @default("")
+  shortDescAr    String   @default("")
+  // Markdown
+  descFr         String   @default("")
+  descAr         String   @default("")
+  metaTitleFr    String   @default("")
+  metaTitleAr    String   @default("")
+  metaDescFr     String   @default("")
+  metaDescAr     String   @default("")
+  // Prices in TND with 3 decimals (millimes).
+  price          Decimal  @db.Decimal(10, 3)
+  compareAtPrice Decimal? @db.Decimal(10, 3)
+  sku            String?  @unique
+  stock          Int      @default(0)
+  ageMin         Int?
+  ageMax         Int?
+  pieces         Int?
+  isActive       Boolean  @default(true)
+  isFeatured     Boolean  @default(false)
+  category       Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId     String?
+  images         ProductImage[]
+  orderItems     OrderItem[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([isActive, isFeatured])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  url       String
+  altFr     String  @default("")
+  altAr     String  @default("")
+  sortOrder Int     @default(0)
+
+  @@index([productId])
+}
+
+model BlogPost {
+  id          String    @id @default(cuid())
+  slugFr      String    @unique
+  slugAr      String    @unique
+  titleFr     String
+  titleAr     String
+  excerptFr   String    @default("")
+  excerptAr   String    @default("")
+  // Markdown
+  contentFr   String    @default("")
+  contentAr   String    @default("")
+  metaTitleFr String    @default("")
+  metaTitleAr String    @default("")
+  metaDescFr  String    @default("")
+  metaDescAr  String    @default("")
+  coverImage  String?
+  author      String    @default("KiddoCraft")
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([isPublished, publishedAt])
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  // Human-friendly reference shown to the customer, e.g. KC-1042
+  number       Int         @unique @default(autoincrement())
+  status       OrderStatus @default(PENDING)
+  customerName String
+  phone        String
+  email        String?
+  governorate  String
+  city         String
+  address      String
+  note         String?
+  locale       String      @default("fr")
+  subtotal     Decimal     @db.Decimal(10, 3)
+  shippingFee  Decimal     @db.Decimal(10, 3)
+  total        Decimal     @db.Decimal(10, 3)
+  items        OrderItem[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId String?
+  // Snapshot at order time so later edits don't rewrite history.
+  name      String
+  unitPrice Decimal  @db.Decimal(10, 3)
+  quantity  Int
+
+  @@index([orderId])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+// Single row (id = "site") of store-wide settings editable from the admin.
+model Settings {
+  id                String  @id @default("site")
+  shippingFee       Decimal @default(7) @db.Decimal(10, 3)
+  freeShippingFrom  Decimal @default(150) @db.Decimal(10, 3)
+  phone             String  @default("")
+  whatsapp          String  @default("")
+  email             String  @default("")
+  instagram         String  @default("")
+  facebook          String  @default("")
+  tiktok            String  @default("")
+  announcementFr    String  @default("")
+  announcementAr    String  @default("")
+  updatedAt         DateTime @updatedAt
+}
