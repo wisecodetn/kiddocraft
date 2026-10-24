@@ -39,12 +39,12 @@ export default async function ShopPage({ searchParams }: PageProps<"/[locale]/bo
   return (
     <div className="container-x py-8 lg:py-12">
       <Breadcrumbs locale={locale} items={[{ name: tn("shop"), href: "/boutique" }]} />
-      <header className="mb-8 mt-6">
+      <header className="mb-6 mt-6 sm:mb-8">
         <h1 className="font-display text-4xl font-bold sm:text-5xl">{t("title")}</h1>
         <p className="mt-3 max-w-2xl text-lg text-muted">{t("subtitle")}</p>
-        <nav className="mt-6 flex flex-wrap gap-2" aria-label={tn("categories")}>
+        <nav className="no-scrollbar -mx-4 mt-6 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0" aria-label={tn("categories")}>
           {categories.map((c) => (
-            <Link key={c.id} href={`/categorie/${slugOf(c, locale)}`} className="rounded-2xl bg-white px-4 py-2.5 font-display font-semibold shadow-card transition hover:-translate-y-0.5 hover:text-sky-600">
+            <Link key={c.id} href={`/categorie/${slugOf(c, locale)}`} className="shrink-0 rounded-2xl bg-white px-4 py-2.5 font-display font-semibold shadow-card transition hover:-translate-y-0.5 hover:text-sky-600">
               {tr(c, "name", locale)}
             </Link>
           ))}

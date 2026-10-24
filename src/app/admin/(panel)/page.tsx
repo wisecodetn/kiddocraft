@@ -60,7 +60,7 @@ export default async function DashboardPage() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[2fr_1fr]">
-        <section className="rounded-3xl bg-white p-5 shadow-card sm:p-6">
+        <section className="min-w-0 rounded-3xl bg-white p-5 shadow-card sm:p-6">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-xl font-semibold">Dernières commandes</h2>
             <Link href="/admin/commandes" className="inline-flex items-center gap-1 text-sm font-bold text-sky-600 hover:underline">
@@ -88,7 +88,7 @@ export default async function DashboardPage() {
           )}
         </section>
 
-        <section className="rounded-3xl bg-white p-5 shadow-card sm:p-6">
+        <section className="min-w-0 rounded-3xl bg-white p-5 shadow-card sm:p-6">
           <h2 className="flex items-center gap-2 font-display text-xl font-semibold">
             <AlertTriangle className="size-5 text-sun-500" /> Stock faible
           </h2>

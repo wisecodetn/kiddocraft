@@ -32,7 +32,7 @@ export default async function OrderPage({ params }: PageProps<"/admin/commandes/
       </header>
 
       <div className="grid items-start gap-6 xl:grid-cols-[1.6fr_1fr]">
-        <section className="rounded-3xl bg-white p-5 shadow-card sm:p-6">
+        <section className="min-w-0 rounded-3xl bg-white p-5 shadow-card sm:p-6">
           <h2 className="font-display text-xl font-semibold">Articles</h2>
           <ul className="mt-4 divide-y divide-line">
             {order.items.map((item) => {
@@ -74,7 +74,7 @@ export default async function OrderPage({ params }: PageProps<"/admin/commandes/
           </dl>
         </section>
 
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <section className="rounded-3xl bg-white p-5 shadow-card sm:p-6">
             <h2 className="font-display text-xl font-semibold">Statut</h2>
             <StatusForm orderId={order.id} status={order.status} />

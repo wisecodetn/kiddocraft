@@ -11,7 +11,7 @@ const triColors = {
 
 export function FloatingTiles({ tiles }: { tiles: TileSpec[] }) {
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+    <div className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block" aria-hidden>
       {tiles.map((t, i) =>
         t.shape === "triangle" ? (
           <svg

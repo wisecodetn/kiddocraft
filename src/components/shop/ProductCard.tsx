@@ -31,14 +31,14 @@ export async function ProductCard({ product: p, locale, priority = false }: { pr
           {soldOut && <span className="chip bg-ink/80 text-white">{t("outOfStock")}</span>}
         </div>
       </Link>
-      <div className="flex flex-1 flex-col gap-2 p-4">
+      <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
         <div className="flex flex-wrap gap-1.5">
           {p.ageMin != null && (
             <span className="chip bg-sun-50 text-sun-700">{p.ageMax != null ? t("age", { min: p.ageMin, max: p.ageMax }) : t("ageFrom", { min: p.ageMin })}</span>
           )}
-          {p.pieces != null && <span className="chip bg-sky-50 text-sky-700">{t("pieces", { count: p.pieces })}</span>}
+          {p.pieces != null && <span className="chip hidden bg-sky-50 text-sky-700 sm:inline-flex">{t("pieces", { count: p.pieces })}</span>}
         </div>
-        <h3 className="font-display text-lg font-semibold leading-snug">
+        <h3 className="line-clamp-3 font-display text-base font-semibold leading-snug sm:text-lg">
           <Link href={href} className="after:absolute after:inset-0 after:content-[''] hover:text-sky-600">
             {p.name}
           </Link>
@@ -46,7 +46,7 @@ export async function ProductCard({ product: p, locale, priority = false }: { pr
         <div className="mt-auto flex items-end justify-between gap-2 pt-2">
           <p className="flex flex-col leading-tight">
             {discount > 0 && <s className="whitespace-nowrap text-sm text-muted">{formatPrice(p.compareAtPrice!, locale)}</s>}
-            <span className="whitespace-nowrap font-display text-xl font-bold text-sky-600">{formatPrice(p.price, locale)}</span>
+            <span className="whitespace-nowrap font-display text-lg font-bold text-sky-600 sm:text-xl">{formatPrice(p.price, locale)}</span>
           </p>
           <div className="relative z-10">
             <AddToCartButton

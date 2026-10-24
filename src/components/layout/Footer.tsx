@@ -18,8 +18,8 @@ export async function Footer({ locale }: { locale: Locale }) {
       <svg className="absolute -top-12 left-0 h-12 w-full text-sky-700" viewBox="0 0 1440 48" preserveAspectRatio="none" aria-hidden>
         <path d="M0 48 C 360 0 1080 0 1440 48 Z" fill="currentColor" />
       </svg>
-      <div className="container-x grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
-        <div>
+      <div className="container-x grid grid-cols-2 gap-x-6 gap-y-10 py-12 sm:py-14 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
+        <div className="col-span-2 lg:col-span-1">
           <div className="inline-block rounded-3xl bg-white p-3">
             <Image src="/brand/logo.png" alt="KiddoCraft" width={160} height={112} className="h-16 w-auto" />
           </div>
@@ -87,7 +87,7 @@ export async function Footer({ locale }: { locale: Locale }) {
           </ul>
         </nav>
 
-        <div>
+        <div className="col-span-2 sm:col-span-1">
           <h2 className="font-display text-lg font-semibold text-white">{t("contact")}</h2>
           <ul className="mt-4 space-y-3 text-sky-100">
             {s.phone && (

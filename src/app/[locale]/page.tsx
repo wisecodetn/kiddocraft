@@ -73,7 +73,7 @@ export default async function HomePage() {
             { className: "end-[40%] bottom-16 size-7", color: "sun", shape: "triangle", rotate: 30, delay: 0.5 },
           ]}
         />
-        <div className="container-x relative grid items-center gap-10 py-14 lg:grid-cols-2 lg:py-20">
+        <div className="container-x relative grid items-center gap-10 py-10 sm:py-14 lg:grid-cols-2 lg:py-20">
           <div className="animate-slide-in">
             <span className="chip bg-white/80 px-4 py-1.5 text-sm text-sky-700 shadow-sm">
               <Sparkles className="size-4 text-sun-500" aria-hidden /> {th("badge")}
@@ -89,11 +89,11 @@ export default async function HomePage() {
               {after}
             </h1>
             <p className="mt-6 max-w-xl text-lg text-ink-soft sm:text-xl">{th("subtitle")}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/boutique" className="btn btn-sun px-8 py-4 text-lg">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link href="/boutique" className="btn btn-sun px-8 py-3.5 text-lg sm:py-4">
                 {th("ctaShop")} <Arrow className="size-5" aria-hidden />
               </Link>
-              <Link href="#categories" className="btn btn-ghost px-8 py-4 text-lg">
+              <Link href="#categories" className="btn btn-ghost px-8 py-3.5 text-lg sm:py-4">
                 {th("ctaCategories")}
               </Link>
             </div>
@@ -110,8 +110,9 @@ export default async function HomePage() {
             </ul>
           </div>
 
+          {/* Desktop only: on phones the picture pushed the shop below the fold. */}
           {heroProduct?.image && (
-            <div className="relative mx-auto w-full max-w-md lg:max-w-lg">
+            <div className="relative mx-auto hidden w-full max-w-md lg:block lg:max-w-lg">
               <div className="absolute -inset-4 rotate-3 rounded-[2.5rem] bg-sun-400/90" aria-hidden />
               <div className="absolute -inset-4 -rotate-2 rounded-[2.5rem] bg-sky-500/90" aria-hidden />
               <Link href={`/produit/${locale === "ar" ? heroProduct.slugAr : heroProduct.slugFr}`} className="relative block overflow-hidden rounded-[2rem] bg-white shadow-soft">
@@ -132,7 +133,7 @@ export default async function HomePage() {
       </section>
 
       {/* ------------------------------------------------------------ Categories */}
-      <section id="categories" className="container-x scroll-mt-24 py-16 lg:py-20">
+      <section id="categories" className="container-x scroll-mt-24 py-12 sm:py-16 lg:py-20">
         <SectionHeading title={t("categoriesTitle")} subtitle={t("categoriesSubtitle")} />
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
           {categories.map((c) => {
@@ -155,7 +156,7 @@ export default async function HomePage() {
       </section>
 
       {/* ------------------------------------------------------------ Featured products */}
-      <section className="bg-cloud py-16 lg:py-20">
+      <section className="bg-cloud py-12 sm:py-16 lg:py-20">
         <div className="container-x">
           <SectionHeading
             title={t("featuredTitle")}
@@ -175,14 +176,14 @@ export default async function HomePage() {
       </section>
 
       {/* ------------------------------------------------------------ Shop by age */}
-      <section className="container-x py-16 lg:py-20">
+      <section className="container-x py-12 sm:py-16 lg:py-20">
         <SectionHeading title={t("ageTitle")} subtitle={t("ageSubtitle")} />
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {AGE_RANGES.map((range, i) => (
-            <Link key={range} href={`/boutique?age=${range}`} className="group card flex items-center gap-4 p-5 transition hover:-translate-y-1">
-              <span className={`tile ${ageStyle[i]} size-14 shrink-0 transition group-hover:rotate-6`} aria-hidden />
+            <Link key={range} href={`/boutique?age=${range}`} className="group card flex flex-col items-center gap-3 p-4 text-center transition hover:-translate-y-1 sm:flex-row sm:gap-4 sm:p-5 sm:text-start">
+              <span className={`tile ${ageStyle[i]} size-12 shrink-0 transition group-hover:rotate-6 sm:size-14`} aria-hidden />
               <span>
-                <span className="block font-display text-xl font-semibold">{ta(range)}</span>
+                <span className="block whitespace-nowrap font-display text-lg font-semibold sm:text-xl">{ta(range)}</span>
                 <span className="text-sm text-muted">{ta(`${range}Hint`)}</span>
               </span>
             </Link>
@@ -221,7 +222,7 @@ export default async function HomePage() {
 
       {/* ------------------------------------------------------------ Blog */}
       {posts.length > 0 && (
-        <section className="container-x py-16 lg:py-20">
+        <section className="container-x py-12 sm:py-16 lg:py-20">
           <SectionHeading
             title={t("blogTitle")}
             subtitle={t("blogSubtitle")}
@@ -240,7 +241,7 @@ export default async function HomePage() {
       )}
 
       {/* ------------------------------------------------------------ FAQ */}
-      <section id="faq" className="scroll-mt-24 bg-cloud py-16 lg:py-20">
+      <section id="faq" className="scroll-mt-24 bg-cloud py-12 sm:py-16 lg:py-20">
         <div className="container-x grid gap-10 lg:grid-cols-[1fr_1.6fr]">
           <div>
             <h2 className="section-title">{t("faqTitle")}</h2>
@@ -264,7 +265,7 @@ export default async function HomePage() {
       </section>
 
       {/* ------------------------------------------------------------ CTA */}
-      <section className="container-x pt-16 lg:pt-20">
+      <section className="container-x pt-12 sm:pt-16 lg:pt-20">
         <div className="relative overflow-hidden rounded-[2.5rem] bg-sun-400 px-6 py-12 text-center sm:px-12">
           <FloatingTiles
             tiles={[

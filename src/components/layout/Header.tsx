@@ -27,17 +27,17 @@ export async function Header({ locale }: { locale: Locale }) {
       </a>
       {announcement && (
         <div className="bg-sky-500 text-white">
-          <p className="container-x flex items-center justify-center gap-2 py-2 text-center text-sm font-bold">
-            <Truck className="size-4 shrink-0" aria-hidden />
+          <p className="container-x flex items-center justify-center gap-2 py-2 text-center text-xs font-bold sm:text-sm">
+            <Truck className="hidden size-4 shrink-0 sm:block" aria-hidden />
             {announcement}
           </p>
         </div>
       )}
       <header className="sticky top-0 z-40 border-b border-line/70 bg-cream/90 backdrop-blur-md">
-        <div className="container-x flex h-[4.5rem] items-center gap-3">
+        <div className="container-x flex h-16 items-center gap-2 sm:h-[4.5rem] sm:gap-3">
           <MobileMenu categories={nav} />
           <Link href="/" className="shrink-0" aria-label="KiddoCraft">
-            <Image src="/brand/logo.png" alt="KiddoCraft" width={520} height={363} priority className="h-14 w-auto" />
+            <Image src="/brand/logo.png" alt="KiddoCraft" width={520} height={363} priority className="h-12 w-auto sm:h-14" />
           </Link>
 
           <nav className="ms-6 hidden items-center gap-1 lg:flex" aria-label={t("menu")}>

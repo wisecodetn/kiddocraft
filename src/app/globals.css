@@ -176,9 +176,14 @@
 .tile-mint { --tile: var(--color-mint-500); --tile-fill: var(--color-mint-100); }
 
 .sky-bg {
-  background:
-    radial-gradient(ellipse at 50% 120%, #d6efc6 0 32%, transparent 33%),
-    linear-gradient(180deg, #dcf0fc 0%, #f3f9fd 55%, #fff8e4 100%);
+  background: linear-gradient(180deg, #dcf0fc 0%, #f3f9fd 55%, #fff8e4 100%);
+}
+@media (min-width: 1024px) {
+  .sky-bg {
+    background:
+      radial-gradient(ellipse at 50% 120%, #d6efc6 0 32%, transparent 33%),
+      linear-gradient(180deg, #dcf0fc 0%, #f3f9fd 55%, #fff8e4 100%);
+  }
 }
 
 .no-scrollbar { scrollbar-width: none; }

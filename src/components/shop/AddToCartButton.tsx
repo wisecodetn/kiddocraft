@@ -22,7 +22,7 @@ export function AddToCartButton({ item, compact = false, disabled = false }: { i
         type="button"
         onClick={onClick}
         disabled={disabled}
-        className="grid size-11 place-items-center rounded-full bg-sun-400 text-ink shadow-[0_3px_0_var(--color-sun-600)] transition hover:bg-sun-500 active:translate-y-0.5 active:shadow-[0_1px_0_var(--color-sun-600)] disabled:bg-line disabled:shadow-none"
+        className="grid size-10 shrink-0 place-items-center rounded-full bg-sun-400 sm:size-11 text-ink shadow-[0_3px_0_var(--color-sun-600)] transition hover:bg-sun-500 active:translate-y-0.5 active:shadow-[0_1px_0_var(--color-sun-600)] disabled:bg-line disabled:shadow-none"
         aria-label={disabled ? t("outOfStock") : t("addToCart")}
         title={disabled ? t("outOfStock") : t("addToCart")}
       >

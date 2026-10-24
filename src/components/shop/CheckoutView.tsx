@@ -81,7 +81,7 @@ export function CheckoutView() {
   return (
     <div className="mt-8 grid items-start gap-8 lg:grid-cols-[1.15fr_1fr]">
       {/* ---------------------------------------------------------- form */}
-      <form action={onSubmit} className="card order-2 p-6 sm:p-8 lg:order-1">
+      <form action={onSubmit} className="card order-2 p-5 sm:p-8 lg:order-1">
         <h2 className="font-display text-2xl font-semibold">{tc("title")}</h2>
         <p className="mt-1 text-muted">{tc("subtitle")}</p>
 
@@ -141,7 +141,14 @@ export function CheckoutView() {
 
         <button type="submit" disabled={pending} className="btn btn-sun mt-6 w-full py-4 text-lg">
           {pending ? <Loader2 className="size-5 animate-spin" /> : null}
-          {pending ? tc("sending") : `${tc("submit")} · ${formatPrice(cart.total, locale)}`}
+          {pending ? (
+            tc("sending")
+          ) : (
+            <>
+              {tc("submit")}
+              <span className="hidden sm:inline">· {formatPrice(cart.total, locale)}</span>
+            </>
+          )}
         </button>
         <p className="mt-3 flex items-center justify-center gap-1.5 text-sm text-muted">
           <Lock className="size-3.5" aria-hidden /> {tc("secure")}

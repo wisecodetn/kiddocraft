@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
@@ -27,7 +28,9 @@ export function MobileMenu({ categories }: { categories: NavCategory[] }) {
       <button type="button" onClick={() => setOpen(true)} className="grid size-11 place-items-center rounded-full border-2 border-line bg-white lg:hidden" aria-label={t("menu")} aria-expanded={open}>
         <Menu className="size-5" />
       </button>
-      {open && (
+      {/* Portal: the sticky header's backdrop-blur would otherwise confine this fixed overlay to the header box. */}
+      {open &&
+        createPortal(
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label={t("menu")}>
           <button type="button" className="absolute inset-0 bg-ink/40" aria-label={t("close")} onClick={() => setOpen(false)} />
           <nav className="absolute inset-y-0 start-0 flex w-[85%] max-w-sm flex-col gap-1 overflow-y-auto bg-cream p-5 shadow-2xl animate-slide-in">
@@ -65,8 +68,9 @@ export function MobileMenu({ categories }: { categories: NavCategory[] }) {
               <LanguageSwitcher />
             </div>
           </nav>
-        </div>
-      )}
+        </div>,
+          document.body,
+        )}
     </>
   );
 }
