@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { Banknote, Loader2, Lock, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { trackBeginCheckout } from "@/lib/analytics";
 import { placeOrder, type OrderResult } from "@/app/[locale]/panier/actions";
 import { Link, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/locales";
@@ -22,6 +23,16 @@ export function CheckoutView() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const checkoutTracked = useRef(false);
+
+  // InitiateCheckout / begin_checkout, once the saved cart is known.
+  useEffect(() => {
+    if (!cart.ready || cart.items.length === 0 || checkoutTracked.current) return;
+    checkoutTracked.current = true;
+    const items = cart.items.map((i) => ({ id: i.id, name: i.nameFr, price: i.price, qty: i.qty }));
+    const timer = setTimeout(() => trackBeginCheckout(items), 1500);
+    return () => clearTimeout(timer);
+  }, [cart.ready, cart.items]);
 
   if (!cart.ready) {
     return <div className="mt-8 h-64 animate-pulse rounded-3xl bg-white" />;

@@ -37,7 +37,7 @@ export async function Header({ locale }: { locale: Locale }) {
         <div className="container-x flex h-16 items-center gap-2 sm:h-[4.5rem] sm:gap-3">
           <MobileMenu categories={nav} />
           <Link href="/" className="shrink-0" aria-label="KiddoCraft">
-            <Image src="/brand/logo.png" alt="KiddoCraft" width={520} height={363} priority className="h-12 w-auto sm:h-14" />
+            <Image src="/brand/logo.png" alt="KiddoCraft" width={520} height={363} preload className="h-12 w-auto sm:h-14" />
           </Link>
 
           <nav className="ms-6 hidden items-center gap-1 lg:flex" aria-label={t("menu")}>

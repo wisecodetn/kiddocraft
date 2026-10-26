@@ -42,9 +42,12 @@ model Product {
   nameAr         String
   shortDescFr    String   @default("")
   shortDescAr    String   @default("")
-  // Markdown
+  // Rich text (HTML from the admin editor, sanitized); older rows may still hold Markdown.
   descFr         String   @default("")
   descAr         String   @default("")
+  // Main search phrase per language, checked by the admin SEO analysis.
+  focusKeywordFr String   @default("")
+  focusKeywordAr String   @default("")
   metaTitleFr    String   @default("")
   metaTitleAr    String   @default("")
   metaDescFr     String   @default("")
@@ -90,9 +93,11 @@ model BlogPost {
   titleAr     String
   excerptFr   String    @default("")
   excerptAr   String    @default("")
-  // Markdown
+  // Rich text (HTML from the admin editor, sanitized); older rows may still hold Markdown.
   contentFr   String    @default("")
   contentAr   String    @default("")
+  focusKeywordFr String @default("")
+  focusKeywordAr String @default("")
   metaTitleFr String    @default("")
   metaTitleAr String    @default("")
   metaDescFr  String    @default("")
@@ -173,5 +178,8 @@ model Settings {
   tiktok            String  @default("")
   announcementFr    String  @default("")
   announcementAr    String  @default("")
+  // Tracking, managed from the admin settings: Meta (Facebook/Instagram) Pixel ID and Google Analytics 4 ID (G-…).
+  metaPixelId      String   @default("")
+  gaMeasurementId  String   @default("")
   updatedAt         DateTime @updatedAt
 }

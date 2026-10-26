@@ -6,6 +6,7 @@ import { ProductForm } from "@/components/admin/ProductForm";
 import { DeleteButton } from "@/components/admin/ui";
 import { db } from "@/lib/db";
 import { toNumber } from "@/lib/format";
+import { richTextHtml } from "@/lib/richtext";
 import { deleteProduct } from "../actions";
 
 export const metadata: Metadata = { title: "Modifier le produit" };
@@ -48,8 +49,11 @@ export default async function EditProductPage({ params, searchParams }: PageProp
           slugAr: p.slugAr,
           shortDescFr: p.shortDescFr,
           shortDescAr: p.shortDescAr,
-          descFr: p.descFr,
-          descAr: p.descAr,
+          // Older descriptions are Markdown: the editor works in HTML.
+          descFr: richTextHtml(p.descFr),
+          descAr: richTextHtml(p.descAr),
+          focusKeywordFr: p.focusKeywordFr,
+          focusKeywordAr: p.focusKeywordAr,
           metaTitleFr: p.metaTitleFr,
           metaTitleAr: p.metaTitleAr,
           metaDescFr: p.metaDescFr,

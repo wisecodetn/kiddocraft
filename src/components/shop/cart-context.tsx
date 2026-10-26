@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { trackAddToCart } from "@/lib/analytics";
 
 export type CartItem = {
   id: string;
@@ -84,6 +85,7 @@ export function CartProvider({ children, rules }: { children: ReactNode; rules: 
       if (existing) return prev.map((i) => (i.id === item.id ? { ...i, ...item, qty: clampQty(i.qty + qty, item.stock) } : i));
       return [...prev, { ...item, qty: clampQty(qty, item.stock) }];
     });
+    trackAddToCart({ id: item.id, name: item.nameFr, price: item.price, qty });
     if (!opts?.silent) setOpen(true);
   }, []);
 

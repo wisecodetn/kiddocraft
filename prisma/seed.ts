@@ -5,6 +5,7 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { hashPassword } from "../src/lib/password";
+import { richTextHtml } from "../src/lib/richtext";
 
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) });
 const img = (name: string) => `/images/seed/${name}.webp`;
@@ -610,8 +611,9 @@ async function main() {
       nameAr: p.nameAr,
       shortDescFr: p.shortDescFr,
       shortDescAr: p.shortDescAr,
-      descFr: describeFr(p),
-      descAr: describeAr(p),
+      // Stored as HTML, like content written in the admin editor.
+      descFr: richTextHtml(describeFr(p)),
+      descAr: richTextHtml(describeAr(p)),
       metaDescFr: "",
       metaDescAr: "",
       price: p.price,
@@ -633,7 +635,7 @@ async function main() {
   }
 
   for (const post of posts) {
-    const data = { ...post, isPublished: true };
+    const data = { ...post, contentFr: richTextHtml(post.contentFr), contentAr: richTextHtml(post.contentAr), isPublished: true };
     await db.blogPost.upsert({ where: { slugFr: post.slugFr }, update: {}, create: data });
   }
 

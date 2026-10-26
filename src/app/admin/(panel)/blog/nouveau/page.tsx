@@ -22,6 +22,8 @@ export default function NewPostPage() {
           excerptAr: "",
           contentFr: "",
           contentAr: "",
+          focusKeywordFr: "",
+          focusKeywordAr: "",
           metaTitleFr: "",
           metaTitleAr: "",
           metaDescFr: "",

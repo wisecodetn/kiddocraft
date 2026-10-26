@@ -2,6 +2,8 @@
 
 import { savePost } from "@/app/admin/(panel)/blog/actions";
 import { ImageField } from "./ImageField";
+import { RichTextEditor } from "./RichTextEditor";
+import { SeoAnalysis } from "./SeoAnalysis";
 import { SeoPreview } from "./SeoPreview";
 import { Bilingual, CountedField, Field, FormMessage, Section, SubmitButton, inputClass, useAdminForm } from "./ui";
 
@@ -15,6 +17,8 @@ export type PostFormValues = {
   excerptAr: string;
   contentFr: string;
   contentAr: string;
+  focusKeywordFr: string;
+  focusKeywordAr: string;
   metaTitleFr: string;
   metaTitleAr: string;
   metaDescFr: string;
@@ -25,15 +29,13 @@ export type PostFormValues = {
   publishedAt: string;
 };
 
-const md = "Markdown : ## Sous-titre, **gras**, - liste, [lien](/produit/…), > citation";
-
 export function PostForm({ post, created }: { post: PostFormValues; created?: boolean }) {
   const { state, pending, onSubmit } = useAdminForm(savePost.bind(null, post.id ?? null), created ? { ok: "Article créé ✔" } : undefined);
   const formId = "post-form";
 
   return (
     <form id={formId} onSubmit={onSubmit} className="space-y-6">
-      <Section title="Article" description="Conseil SEO : utilisez des sous-titres (##) et parlez des questions que se posent les parents. Ajoutez des liens vers vos produits.">
+      <Section title="Article" description="Le titre est le H1 de la page ; le chapeau résume l’article dans la liste et sous le titre.">
         <Bilingual
           fr={
             <>
@@ -45,9 +47,6 @@ export function PostForm({ post, created }: { post: PostFormValues; created?: bo
               </Field>
               <Field label="Chapeau (résumé)" hint="Affiché dans la liste des articles et sous le titre.">
                 <textarea name="excerptFr" defaultValue={post.excerptFr} rows={3} className={inputClass} />
-              </Field>
-              <Field label="Contenu" hint={md}>
-                <textarea name="contentFr" defaultValue={post.contentFr} rows={18} className={`${inputClass} font-mono text-sm`} />
               </Field>
             </>
           }
@@ -62,12 +61,23 @@ export function PostForm({ post, created }: { post: PostFormValues; created?: bo
               <Field label="الملخّص">
                 <textarea name="excerptAr" defaultValue={post.excerptAr} rows={3} dir="rtl" className={inputClass} />
               </Field>
-              <Field label="المحتوى" hint={md}>
-                <textarea name="contentAr" defaultValue={post.contentAr} rows={18} dir="rtl" className={inputClass} />
-              </Field>
             </>
           }
         />
+      </Section>
+
+      <Section
+        title="Contenu"
+        description="Conseils SEO : répondez aux questions que se posent les parents, structurez avec des Titres 2 et 3, ajoutez des liens vers vos produits et catégories, et des images avec texte alternatif. Visez 600 mots ou plus."
+      >
+        <div className="space-y-2">
+          <p className="text-sm font-extrabold uppercase tracking-wider text-sky-600">Français</p>
+          <RichTextEditor name="contentFr" defaultValue={post.contentFr} minHeight={480} placeholder="Rédigez votre article…" />
+        </div>
+        <div className="space-y-2">
+          <p className="text-sm font-extrabold uppercase tracking-wider text-sun-700">العربية · Arabe</p>
+          <RichTextEditor name="contentAr" defaultValue={post.contentAr} dir="rtl" minHeight={480} placeholder="اكتب مقالك…" />
+        </div>
       </Section>
 
       <Section title="Publication">
@@ -94,6 +104,7 @@ export function PostForm({ post, created }: { post: PostFormValues; created?: bo
               <CountedField label="Titre SEO" name="metaTitleFr" defaultValue={post.metaTitleFr} max={60} />
               <CountedField label="Méta-description" name="metaDescFr" defaultValue={post.metaDescFr} max={155} multiline />
               <SeoPreview formId={formId} lang="Fr" urlPrefix="/blog/" />
+              <SeoAnalysis formId={formId} lang="Fr" fields={{ title: "titleFr", summary: "excerptFr", content: "contentFr" }} defaultKeyword={post.focusKeywordFr} minWords={600} />
             </>
           }
           ar={
@@ -101,6 +112,7 @@ export function PostForm({ post, created }: { post: PostFormValues; created?: bo
               <CountedField label="عنوان SEO" name="metaTitleAr" defaultValue={post.metaTitleAr} max={60} dir="rtl" />
               <CountedField label="الوصف التعريفي" name="metaDescAr" defaultValue={post.metaDescAr} max={155} multiline dir="rtl" />
               <SeoPreview formId={formId} lang="Ar" urlPrefix="/blog/" />
+              <SeoAnalysis formId={formId} lang="Ar" fields={{ title: "titleAr", summary: "excerptAr", content: "contentAr" }} defaultKeyword={post.focusKeywordAr} minWords={600} />
             </>
           }
         />

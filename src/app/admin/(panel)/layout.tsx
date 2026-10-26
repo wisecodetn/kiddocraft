@@ -15,7 +15,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       <aside className="border-b border-line bg-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col lg:border-b-0 lg:border-e">
         <div className="flex items-center justify-between gap-3 px-5 py-4 lg:block">
           <Link href="/admin" className="flex items-center gap-3">
-            <Image src="/brand/logo.png" alt="KiddoCraft" width={520} height={363} className="h-11 w-auto" priority />
+            <Image src="/brand/logo.png" alt="KiddoCraft" width={520} height={363} className="h-11 w-auto" preload />
             <span className="rounded-full bg-sky-50 px-2.5 py-1 text-xs font-extrabold text-sky-700">Admin</span>
           </Link>
           <form action={logout} className="lg:hidden">

@@ -3,7 +3,10 @@
 import { Bilingual, Field, FormMessage, Section, SubmitButton, inputClass, useAdminForm } from "@/components/admin/ui";
 import { changePassword, saveSettings } from "./actions";
 
-type Values = Record<"shippingFee" | "freeShippingFrom" | "phone" | "whatsapp" | "email" | "instagram" | "facebook" | "tiktok" | "announcementFr" | "announcementAr", string>;
+type Values = Record<
+  "shippingFee" | "freeShippingFrom" | "phone" | "whatsapp" | "email" | "instagram" | "facebook" | "tiktok" | "announcementFr" | "announcementAr" | "metaPixelId" | "gaMeasurementId",
+  string
+>;
 
 export function SettingsForm({ values: v }: { values: Values }) {
   const { state, pending, onSubmit } = useAdminForm(saveSettings, undefined);
@@ -54,6 +57,26 @@ export function SettingsForm({ values: v }: { values: Values }) {
           </Field>
           <Field label="TikTok (lien)">
             <input name="tiktok" defaultValue={v.tiktok} placeholder="https://tiktok.com/@…" className={inputClass} />
+          </Field>
+        </div>
+      </Section>
+
+      <Section
+        title="Suivi & statistiques"
+        description="Collez l’ID (ou tout le code fourni par Meta / Google : l’ID est extrait automatiquement). Laissez vide pour désactiver. Les visites de l’administration ne sont jamais comptées."
+      >
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field
+            label="Meta Pixel (Facebook / Instagram)"
+            hint="Gestionnaire d’événements Meta → Sources de données → votre pixel → ID (15–16 chiffres). Événements envoyés : PageView, ViewContent, AddToCart, InitiateCheckout, Purchase."
+          >
+            <input name="metaPixelId" defaultValue={v.metaPixelId} placeholder="123456789012345" className={inputClass} />
+          </Field>
+          <Field
+            label="Google Analytics 4"
+            hint="Google Analytics → Admin → Flux de données → Web → ID de mesure (G-…). Événements e-commerce : view_item, add_to_cart, begin_checkout, purchase."
+          >
+            <input name="gaMeasurementId" defaultValue={v.gaMeasurementId} placeholder="G-XXXXXXXXXX" className={inputClass} />
           </Field>
         </div>
       </Section>

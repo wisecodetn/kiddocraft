@@ -5,7 +5,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { PostCard, readingMinutes } from "@/components/shop/PostCard";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { Markdown } from "@/components/ui/Markdown";
+import { RichText } from "@/components/ui/RichText";
 import { SectionHeading } from "@/components/ui/Tiles";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/locales";
@@ -85,10 +85,10 @@ export default async function PostPage({ params }: PageProps<"/[locale]/blog/[sl
         </header>
         {post.coverImage && (
           <div className="relative mt-8 aspect-[1200/630] overflow-hidden rounded-[2rem] shadow-soft">
-            <Image src={post.coverImage} alt={title} fill priority sizes="(min-width: 896px) 896px, 100vw" className="object-cover" />
+            <Image src={post.coverImage} alt={title} fill preload sizes="(min-width: 896px) 896px, 100vw" className="object-cover" />
           </div>
         )}
-        <Markdown className="mx-auto mt-10 max-w-3xl">{content}</Markdown>
+        <RichText className="mx-auto mt-10 max-w-3xl">{content}</RichText>
         <div className="mx-auto mt-12 flex max-w-3xl flex-wrap gap-3">
           <Link href="/boutique" className="btn btn-sun">
             {t("shopCta")}

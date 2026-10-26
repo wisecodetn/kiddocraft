@@ -20,7 +20,7 @@ export async function ProductCard({ product: p, locale, priority = false }: { pr
             src={p.image}
             alt={p.imageAlt}
             fill
-            priority={priority}
+            preload={priority}
             sizes="(min-width: 1280px) 300px, (min-width: 768px) 33vw, 50vw"
             className={`object-cover transition duration-500 ${p.hoverImage ? "group-hover:opacity-0" : "group-hover:scale-105"}`}
           />

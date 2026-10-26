@@ -24,6 +24,8 @@ export default async function SettingsPage() {
           tiktok: s.tiktok,
           announcementFr: s.announcementFr,
           announcementAr: s.announcementAr,
+          metaPixelId: s.metaPixelId,
+          gaMeasurementId: s.gaMeasurementId,
         }}
       />
       <PasswordForm />

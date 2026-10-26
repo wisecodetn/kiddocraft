@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound, permanentRedirect } from "next/navigation";
 import { ProductListing } from "@/components/shop/ProductListing";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { Markdown } from "@/components/ui/Markdown";
+import { RichText } from "@/components/ui/RichText";
 import type { Locale } from "@/i18n/locales";
 import { t as tr } from "@/lib/localize";
 import { paths } from "@/lib/paths";
@@ -68,11 +68,11 @@ export default async function CategoryPage({ params, searchParams }: PageProps<"
       <header className="mb-10 mt-6 grid items-center gap-6 md:grid-cols-[1fr_auto]">
         <div>
           <h1 className="font-display text-4xl font-bold sm:text-5xl">{name}</h1>
-          {desc && <Markdown className="mt-4 max-w-3xl">{desc}</Markdown>}
+          {desc && <RichText className="mt-4 max-w-3xl">{desc}</RichText>}
         </div>
         {c.image && (
           <div className="relative hidden size-40 overflow-hidden rounded-[2rem] shadow-soft md:block lg:size-48">
-            <Image src={c.image} alt={name} fill sizes="192px" className="object-cover" priority />
+            <Image src={c.image} alt={name} fill sizes="192px" className="object-cover" />
           </div>
         )}
       </header>

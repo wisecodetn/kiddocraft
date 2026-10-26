@@ -26,7 +26,7 @@ export function SeoPreview({ formId, lang, urlPrefix }: { formId: string; lang: 
   }, [formId, lang]);
 
   const title = view.title ? `${view.title} | KiddoCraft` : "Titre de la page | KiddoCraft";
-  const desc = view.desc.replace(/[#*_>`]/g, "").replace(/\s+/g, " ");
+  const desc = view.desc.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/[#*_>`]/g, "").replace(/\s+/g, " ").trim();
   return (
     <div dir={lang === "Ar" ? "rtl" : "ltr"} className="rounded-2xl border-2 border-line bg-white p-4">
       <p className="text-xs font-extrabold uppercase tracking-wider text-muted" dir="ltr">

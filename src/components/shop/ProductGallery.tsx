@@ -12,7 +12,7 @@ export function ProductGallery({ images, badge }: { images: { url: string; alt: 
   return (
     <div className="flex flex-col gap-3 lg:sticky lg:top-24">
       <div className="relative aspect-square overflow-hidden rounded-[2rem] bg-sky-50 shadow-card">
-        {current && <Image key={current.url} src={current.url} alt={current.alt} fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover animate-slide-in" />}
+        {current && <Image key={current.url} src={current.url} alt={current.alt} fill preload sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover animate-slide-in" />}
         {badge && <div className="absolute start-4 top-4 flex flex-col items-start gap-2">{badge}</div>}
       </div>
       {images.length > 1 && (

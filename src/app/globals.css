@@ -152,28 +152,42 @@
   .prose-kc a { @apply font-semibold text-sky-600 underline decoration-sky-200 decoration-2 underline-offset-4 hover:decoration-sky-500; }
   .prose-kc strong { @apply font-bold text-ink; }
   .prose-kc blockquote { @apply rounded-2xl border-s-4 border-sun-400 bg-sun-50 px-5 py-4 text-ink; }
-  .prose-kc img { @apply rounded-2xl; }
+  .prose-kc img { @apply h-auto max-w-full rounded-2xl; }
+  .prose-kc h4 { @apply mt-6 font-display text-lg font-semibold text-ink; }
+  .prose-kc hr { @apply my-8 border-line; }
+  .prose-kc code { @apply rounded bg-cloud px-1.5 py-0.5 text-[0.9em]; }
+  .prose-kc pre { @apply overflow-x-auto rounded-2xl bg-cloud p-4; }
+  .prose-kc u { @apply decoration-sun-400 decoration-2 underline-offset-4; }
+  /* Formats from the admin editor (Quill) */
+  .prose-kc .ql-align-center { text-align: center; }
+  .prose-kc .ql-align-right { text-align: right; }
+  .prose-kc .ql-align-justify { text-align: justify; }
+  .prose-kc iframe.ql-video,
+  .prose-kc iframe { @apply aspect-video h-auto w-full rounded-2xl; }
 }
 
-/* Decorative magnetic tile used in hero and section backgrounds. */
-.tile {
-  --tile: var(--color-sky-400);
-  --tile-fill: var(--color-sky-100);
-  position: relative;
-  border: 0.3rem solid var(--tile);
-  background: var(--tile-fill);
-  border-radius: 0.6rem;
+/* Decorative magnetic tile used in hero and section backgrounds.
+   In the components layer so utilities such as `absolute` override its `position: relative`. */
+@layer components {
+  .tile {
+    --tile: var(--color-sky-400);
+    --tile-fill: var(--color-sky-100);
+    position: relative;
+    border: 0.3rem solid var(--tile);
+    background: var(--tile-fill);
+    border-radius: 0.6rem;
+  }
+  .tile::after {
+    content: "";
+    position: absolute;
+    inset: 30%;
+    border: 0.18rem solid rgb(255 255 255 / 0.85);
+    border-radius: 0.2rem;
+  }
+  .tile-sun { --tile: var(--color-sun-500); --tile-fill: var(--color-sun-200); }
+  .tile-coral { --tile: var(--color-coral-500); --tile-fill: var(--color-coral-100); }
+  .tile-mint { --tile: var(--color-mint-500); --tile-fill: var(--color-mint-100); }
 }
-.tile::after {
-  content: "";
-  position: absolute;
-  inset: 30%;
-  border: 0.18rem solid rgb(255 255 255 / 0.85);
-  border-radius: 0.2rem;
-}
-.tile-sun { --tile: var(--color-sun-500); --tile-fill: var(--color-sun-200); }
-.tile-coral { --tile: var(--color-coral-500); --tile-fill: var(--color-coral-100); }
-.tile-mint { --tile: var(--color-mint-500); --tile-fill: var(--color-mint-100); }
 
 .sky-bg {
   background: linear-gradient(180deg, #dcf0fc 0%, #f3f9fd 55%, #fff8e4 100%);
@@ -184,6 +198,147 @@
       radial-gradient(ellipse at 50% 120%, #d6efc6 0 32%, transparent 33%),
       linear-gradient(180deg, #dcf0fc 0%, #f3f9fd 55%, #fff8e4 100%);
   }
+}
+
+/* Home hero picture in 3D (desktop): stage → idle sway → pointer tilt → layers at different depths. */
+.hero-3d-stage {
+  perspective: 1400px;
+  perspective-origin: 50% 40%;
+}
+.hero-3d-sway {
+  transform-style: preserve-3d;
+  animation: hero-sway 10s ease-in-out infinite;
+}
+.hero-3d-tilt {
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hero-3d-tilt.is-tilting { transition-duration: 0.12s; }
+.hero-3d-stage:has(.is-tilting) .hero-3d-sway { animation-play-state: paused; }
+.hero-3d-layer { transform-style: preserve-3d; }
+/* Light reflection that follows the pointer across the picture. */
+.hero-3d-glare {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--gx, 30%) var(--gy, 20%), rgb(255 255 255 / 0.45), transparent 55%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.is-tilting .hero-3d-glare { opacity: 1; }
+.hero-3d-pop { transform-style: preserve-3d; animation: hero-pop 6s ease-in-out infinite; }
+
+@keyframes hero-sway {
+  0%, 100% { transform: rotateY(-9deg) rotateX(5deg) translateY(0); }
+  50% { transform: rotateY(9deg) rotateX(-3deg) translateY(-14px); }
+}
+@keyframes hero-pop {
+  0% { transform: translateZ(var(--z, 120px)) translateY(0) rotateX(-20deg) rotateY(var(--r, 0deg)) rotateZ(0deg); }
+  50% { transform: translateZ(calc(var(--z, 120px) + 40px)) translateY(-10px) rotateX(-35deg) rotateY(calc(var(--r, 0deg) + 180deg)) rotateZ(10deg); }
+  100% { transform: translateZ(var(--z, 120px)) translateY(0) rotateX(-20deg) rotateY(calc(var(--r, 0deg) + 360deg)) rotateZ(0deg); }
+}
+
+/* 3D blocks (components/ui/Block3D): faces of a cube or a triangular prism whose edge is var(--w).
+   Shading by orientation: top lighter, sides and bottom darker. */
+.block3d {
+  --h: calc(var(--w) / 2);
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform-style: preserve-3d;
+}
+.block3d > .face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: 0.3rem;
+  backface-visibility: hidden;
+}
+.cube > .f-front { transform: translateZ(var(--h)); }
+.cube > .f-back { transform: rotateY(180deg) translateZ(var(--h)); }
+.cube > .f-right { transform: rotateY(90deg) translateZ(var(--h)); filter: brightness(0.86); }
+.cube > .f-left { transform: rotateY(-90deg) translateZ(var(--h)); filter: brightness(0.86); }
+.cube > .f-top { transform: rotateX(90deg) translateZ(var(--h)); filter: brightness(1.08); }
+.cube > .f-bottom { transform: rotateX(-90deg) translateZ(var(--h)); filter: brightness(0.72); }
+/* Prism: equilateral triangle (apex at 13.4% from the top, base on the bottom edge), depth = edge. */
+.prism > .f-front { transform: translateZ(var(--h)); border-radius: 0; }
+.prism > .f-back { transform: rotateY(180deg) translateZ(var(--h)); border-radius: 0; }
+.prism > .f-base { transform: translateY(var(--h)) rotateX(-90deg); filter: brightness(0.72); }
+.prism > .f-left { transform: translate(calc(var(--w) * -0.25), calc(var(--w) * 0.067)) rotateZ(-60deg) rotateX(90deg); filter: brightness(1.02); }
+.prism > .f-right { transform: translate(calc(var(--w) * 0.25), calc(var(--w) * 0.067)) rotateZ(60deg) rotateX(90deg); filter: brightness(0.86); }
+
+/* Hero tile scene: clouds drift slowly. */
+.tile-scene-cloud { animation: cloud-drift 28s ease-in-out infinite alternate; }
+@keyframes cloud-drift {
+  from { translate: -6% 0; }
+  to { translate: 18% 0; }
+}
+
+/* Admin rich text editor (components/admin/RichTextEditor) on top of Quill's snow theme. */
+.kc-editor {
+  border: 2px solid var(--color-line);
+  border-radius: 1rem;
+  background: #fff;
+}
+.kc-editor:focus-within { border-color: var(--color-sky-400); box-shadow: 0 0 0 4px var(--color-sky-100); }
+.kc-editor .kc-editor-toolbar.ql-toolbar.ql-snow {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  border: 0;
+  border-bottom: 2px solid var(--color-line);
+  border-radius: 1rem 1rem 0 0;
+  background: #fff;
+  padding: 0.5rem;
+}
+.kc-editor .ql-toolbar.ql-snow .ql-formats { margin-right: 0.5rem; }
+.kc-editor .ql-toolbar.ql-snow .ql-picker.ql-header { width: 118px; }
+.kc-editor .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+.kc-editor .ql-snow .ql-picker.ql-header .ql-picker-item::before { content: "Paragraphe"; }
+.kc-editor .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+.kc-editor .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before { content: "Titre 2"; }
+.kc-editor .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+.kc-editor .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before { content: "Titre 3"; }
+.kc-editor .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
+.kc-editor .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before { content: "Titre 4"; }
+.kc-editor .kc-editor-body.ql-container.ql-snow { border: 0; font-family: var(--font-sans); font-size: 1rem; }
+.kc-editor .ql-editor { padding: 1.25rem 1.5rem; line-height: 1.75; color: var(--color-ink-soft); }
+.kc-editor .ql-editor h2 { font-family: var(--font-display); font-size: 1.6rem; color: var(--color-ink); margin: 1.2em 0 0.4em; }
+.kc-editor .ql-editor h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--color-ink); margin: 1em 0 0.3em; }
+.kc-editor .ql-editor h4 { font-family: var(--font-display); font-size: 1.1rem; color: var(--color-ink); margin: 0.8em 0 0.3em; }
+.kc-editor .ql-editor blockquote { border-inline-start: 4px solid var(--color-sun-400); background: var(--color-sun-50); border-radius: 0.75rem; padding: 0.75rem 1rem; margin: 0.75rem 0; }
+.kc-editor .ql-editor img { max-width: 100%; height: auto; border-radius: 0.75rem; cursor: pointer; outline-offset: 2px; }
+.kc-editor .ql-editor img:hover { outline: 3px solid var(--color-sky-200); }
+.kc-editor .ql-editor img[alt=""], .kc-editor .ql-editor img:not([alt]) { outline: 3px dashed var(--color-coral-400); }
+.kc-editor .ql-editor a { color: var(--color-sky-600); text-decoration: underline; }
+.kc-editor .ql-editor .ql-video { width: 100%; aspect-ratio: 16 / 9; height: auto; border-radius: 0.75rem; }
+.kc-editor .ql-editor.ql-blank::before { color: var(--color-muted); font-style: normal; left: 1.5rem; right: 1.5rem; }
+.kc-editor .ql-editor[dir="rtl"] { text-align: right; }
+.kc-editor .ql-editor[dir="rtl"] li { padding-left: 0; padding-right: 1.5em; }
+.kc-editor .ql-editor[dir="rtl"] li > .ql-ui::before { margin-left: 0.3em; margin-right: -1.5em; text-align: left; }
+.kc-editor .ql-snow .ql-tooltip { z-index: 10; border-radius: 0.75rem; box-shadow: var(--shadow-soft); }
+.kc-editor-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-top: 2px solid var(--color-line);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* Product page on phones: room for the buy bar pinned to the bottom (components/shop/PurchaseBox). */
+@media (max-width: 1023.98px) {
+  body.has-buy-bar { padding-bottom: 8.5rem; }
 }
 
 .no-scrollbar { scrollbar-width: none; }

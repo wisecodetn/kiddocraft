@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { Banknote, RefreshCw, Truck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound, permanentRedirect } from "next/navigation";
+import { TrackViewItem } from "@/components/analytics/TrackEvents";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { ProductGallery } from "@/components/shop/ProductGallery";
 import { PurchaseBox } from "@/components/shop/PurchaseBox";
 import { Breadcrumbs, type Crumb } from "@/components/ui/Breadcrumbs";
-import { Markdown } from "@/components/ui/Markdown";
+import { RichText } from "@/components/ui/RichText";
 import { SectionHeading } from "@/components/ui/Tiles";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/locales";
@@ -151,7 +152,7 @@ export default async function ProductPage({ params }: PageProps<"/[locale]/produ
           {desc && (
             <section className="mt-10">
               <h2 className="font-display text-2xl font-semibold">{t("description")}</h2>
-              <Markdown className="mt-4">{desc}</Markdown>
+              <RichText className="mt-4">{desc}</RichText>
             </section>
           )}
 
@@ -188,6 +189,7 @@ export default async function ProductPage({ params }: PageProps<"/[locale]/produ
       )}
 
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(productLd)} />
+      <TrackViewItem item={{ id: p.id, name: p.nameFr, price, qty: 1 }} />
     </div>
   );
 }

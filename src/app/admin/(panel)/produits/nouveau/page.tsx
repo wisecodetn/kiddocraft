@@ -25,6 +25,8 @@ export default async function NewProductPage() {
           shortDescAr: "",
           descFr: "",
           descAr: "",
+          focusKeywordFr: "",
+          focusKeywordAr: "",
           metaTitleFr: "",
           metaTitleAr: "",
           metaDescFr: "",

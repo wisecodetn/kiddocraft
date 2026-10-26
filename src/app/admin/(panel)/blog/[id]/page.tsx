@@ -5,6 +5,7 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import { PostForm } from "@/components/admin/PostForm";
 import { DeleteButton } from "@/components/admin/ui";
 import { db } from "@/lib/db";
+import { richTextHtml } from "@/lib/richtext";
 import { deletePost } from "../actions";
 
 export const metadata: Metadata = { title: "Modifier l'article" };
@@ -41,8 +42,11 @@ export default async function EditPostPage({ params, searchParams }: PageProps<"
           slugAr: p.slugAr,
           excerptFr: p.excerptFr,
           excerptAr: p.excerptAr,
-          contentFr: p.contentFr,
-          contentAr: p.contentAr,
+          // Older articles are Markdown: the editor works in HTML.
+          contentFr: richTextHtml(p.contentFr),
+          contentAr: richTextHtml(p.contentAr),
+          focusKeywordFr: p.focusKeywordFr,
+          focusKeywordAr: p.focusKeywordAr,
           metaTitleFr: p.metaTitleFr,
           metaTitleAr: p.metaTitleAr,
           metaDescFr: p.metaDescFr,

@@ -12,11 +12,14 @@ if (!email || !password || password.length < 10) {
 }
 
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) });
-const passwordHash = await hashPassword(password);
-const user = await db.adminUser.upsert({
-  where: { email: email.toLowerCase() },
-  update: { passwordHash, name },
-  create: { email: email.toLowerCase(), passwordHash, name },
-});
-console.log(`Admin ready: ${user.email}`);
-await db.$disconnect();
+async function main() {
+  const passwordHash = await hashPassword(password);
+  const user = await db.adminUser.upsert({
+    where: { email: email.toLowerCase() },
+    update: { passwordHash, name },
+    create: { email: email.toLowerCase(), passwordHash, name },
+  });
+  console.log(`Admin ready: ${user.email}`);
+}
+
+main().finally(() => db.$disconnect());

@@ -2,6 +2,8 @@
 
 import { saveProduct } from "@/app/admin/(panel)/produits/actions";
 import { ProductImagesField } from "./ProductImagesField";
+import { RichTextEditor } from "./RichTextEditor";
+import { SeoAnalysis } from "./SeoAnalysis";
 import { SeoPreview } from "./SeoPreview";
 import { Bilingual, CountedField, Field, FormMessage, Section, SubmitButton, inputClass, useAdminForm } from "./ui";
 
@@ -15,6 +17,8 @@ export type ProductFormValues = {
   shortDescAr: string;
   descFr: string;
   descAr: string;
+  focusKeywordFr: string;
+  focusKeywordAr: string;
   metaTitleFr: string;
   metaTitleAr: string;
   metaDescFr: string;
@@ -31,8 +35,6 @@ export type ProductFormValues = {
   isFeatured: boolean;
   images: { id: string; url: string; altFr: string; altAr: string }[];
 };
-
-const md = "Markdown : **gras**, ## Titre, - liste";
 
 export function ProductForm({ product, categories, created }: { product: ProductFormValues; categories: { id: string; name: string }[]; created?: boolean }) {
   const { state, pending, onSubmit } = useAdminForm(saveProduct.bind(null, product.id ?? null), created ? { ok: "Produit créé ✔ Vous pouvez continuer à le modifier." } : undefined);
@@ -53,9 +55,6 @@ export function ProductForm({ product, categories, created }: { product: Product
               <Field label="Accroche courte" hint="1–2 phrases, affichées sous le titre et dans les listes.">
                 <textarea name="shortDescFr" defaultValue={product.shortDescFr} rows={2} className={inputClass} />
               </Field>
-              <Field label="Description détaillée" hint={md}>
-                <textarea name="descFr" defaultValue={product.descFr} rows={10} className={`${inputClass} font-mono text-sm`} />
-              </Field>
             </>
           }
           ar={
@@ -69,12 +68,23 @@ export function ProductForm({ product, categories, created }: { product: Product
               <Field label="وصف قصير">
                 <textarea name="shortDescAr" defaultValue={product.shortDescAr} rows={2} dir="rtl" className={inputClass} />
               </Field>
-              <Field label="الوصف المفصّل" hint={md}>
-                <textarea name="descAr" defaultValue={product.descAr} rows={10} dir="rtl" className={inputClass} />
-              </Field>
             </>
           }
         />
+      </Section>
+
+      <Section
+        title="Description détaillée"
+        description="Comme dans WordPress : titres (Titre 2, 3), listes, gras, liens vers vos autres produits, images avec texte alternatif, vidéo YouTube. Visez au moins 200 mots par langue."
+      >
+        <div className="space-y-2">
+          <p className="text-sm font-extrabold uppercase tracking-wider text-sky-600">Français</p>
+          <RichTextEditor name="descFr" defaultValue={product.descFr} placeholder="Décrivez le produit : ce que l’enfant apprend, le contenu de la boîte, les conseils d’utilisation…" />
+        </div>
+        <div className="space-y-2">
+          <p className="text-sm font-extrabold uppercase tracking-wider text-sun-700">العربية · Arabe</p>
+          <RichTextEditor name="descAr" defaultValue={product.descAr} dir="rtl" placeholder="صِف المنتج: ما يتعلّمه الطفل، محتوى العلبة، نصائح الاستعمال…" />
+        </div>
       </Section>
 
       <Section title="Photos">
@@ -126,13 +136,17 @@ export function ProductForm({ product, categories, created }: { product: Product
         </div>
       </Section>
 
-      <Section title="Référencement (SEO)" description="Optionnel : par défaut, Google affiche le nom et l'accroche. Personnalisez-les ici pour mieux cibler les recherches (ex. « tuiles magnétiques Tunisie »).">
+      <Section
+        title="Référencement (SEO)"
+        description="Choisissez le mot-clé principal que les parents tapent sur Google, puis suivez les conseils jusqu’au vert. Titre et description sont optionnels : par défaut, Google affiche le nom et l’accroche."
+      >
         <Bilingual
           fr={
             <>
               <CountedField label="Titre SEO" name="metaTitleFr" defaultValue={product.metaTitleFr} max={60} />
               <CountedField label="Méta-description" name="metaDescFr" defaultValue={product.metaDescFr} max={155} multiline />
               <SeoPreview formId={formId} lang="Fr" urlPrefix="/produit/" />
+              <SeoAnalysis formId={formId} lang="Fr" fields={{ title: "nameFr", summary: "shortDescFr", content: "descFr" }} defaultKeyword={product.focusKeywordFr} minWords={200} />
             </>
           }
           ar={
@@ -140,6 +154,7 @@ export function ProductForm({ product, categories, created }: { product: Product
               <CountedField label="عنوان SEO" name="metaTitleAr" defaultValue={product.metaTitleAr} max={60} dir="rtl" />
               <CountedField label="الوصف التعريفي" name="metaDescAr" defaultValue={product.metaDescAr} max={155} multiline dir="rtl" />
               <SeoPreview formId={formId} lang="Ar" urlPrefix="/produit/" />
+              <SeoAnalysis formId={formId} lang="Ar" fields={{ title: "nameAr", summary: "shortDescAr", content: "descAr" }} defaultKeyword={product.focusKeywordAr} minWords={200} />
             </>
           }
         />

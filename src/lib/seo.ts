@@ -67,9 +67,14 @@ export function pageMetadata(opts: {
   };
 }
 
-/** Meta description: first ~155 characters of plain text, cut on a word. */
+/** Meta description: first ~155 characters of plain text (from HTML or Markdown), cut on a word. */
 export function describe(...candidates: (string | null | undefined)[]): string {
   const text = (candidates.find((c) => c && c.trim()) ?? "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&quot;/g, '"')
     .replace(/[#*_>`[\]()!-]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();

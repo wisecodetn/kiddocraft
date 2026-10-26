@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { bool, resolveSlug, revalidateStore, str, type FormState } from "@/lib/admin";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { sanitizeRichText } from "@/lib/richtext";
 import { deleteImage, saveImage } from "@/lib/uploads";
 
 export async function savePost(id: string | null, _prev: FormState, fd: FormData): Promise<FormState> {
@@ -43,8 +44,10 @@ export async function savePost(id: string | null, _prev: FormState, fd: FormData
     slugAr: slugAr.slug,
     excerptFr: str(fd, "excerptFr"),
     excerptAr: str(fd, "excerptAr"),
-    contentFr: str(fd, "contentFr"),
-    contentAr: str(fd, "contentAr"),
+    contentFr: sanitizeRichText(str(fd, "contentFr")),
+    contentAr: sanitizeRichText(str(fd, "contentAr")),
+    focusKeywordFr: str(fd, "focusKeywordFr"),
+    focusKeywordAr: str(fd, "focusKeywordAr"),
     metaTitleFr: str(fd, "metaTitleFr"),
     metaTitleAr: str(fd, "metaTitleAr"),
     metaDescFr: str(fd, "metaDescFr"),

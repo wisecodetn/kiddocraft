@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { Trackers } from "@/components/analytics/Trackers";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { CartDrawer } from "@/components/shop/CartDrawer";
@@ -81,6 +82,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           </CartProvider>
         </NextIntlClientProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd([organization, website])} />
+        <Trackers metaPixelId={settings.metaPixelId} gaMeasurementId={settings.gaMeasurementId} />
       </body>
     </html>
   );

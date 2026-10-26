@@ -3,6 +3,7 @@
 import { money, revalidateStore, str, type FormState } from "@/lib/admin";
 import { hashPassword, requireAdmin, verifyPassword } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { parseGaMeasurementId, parseMetaPixelId } from "@/lib/tracking";
 
 export async function saveSettings(_prev: FormState, fd: FormData): Promise<FormState> {
   await requireAdmin();
@@ -13,7 +14,13 @@ export async function saveSettings(_prev: FormState, fd: FormData): Promise<Form
     const v = str(fd, key);
     return v && !/^https?:\/\//.test(v) ? `https://${v}` : v;
   };
+  const metaPixelId = parseMetaPixelId(str(fd, "metaPixelId"));
+  if (metaPixelId === null) return { error: "ID du Pixel Meta invalide : il s’agit d’un nombre de 15 à 16 chiffres (Gestionnaire d’événements → Sources de données)." };
+  const gaMeasurementId = parseGaMeasurementId(str(fd, "gaMeasurementId"));
+  if (gaMeasurementId === null) return { error: "ID Google Analytics invalide : il commence par « G- » (Admin → Flux de données → ID de mesure)." };
   const data = {
+    metaPixelId,
+    gaMeasurementId,
     shippingFee,
     freeShippingFrom,
     phone: str(fd, "phone"),

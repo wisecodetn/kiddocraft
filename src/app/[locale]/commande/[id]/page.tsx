@@ -3,6 +3,7 @@ import Image from "next/image";
 import { CheckCircle2, MessageCircle } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { TrackPurchase } from "@/components/analytics/TrackEvents";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/locales";
 import { db } from "@/lib/db";
@@ -27,6 +28,14 @@ export default async function OrderConfirmationPage({ params }: PageProps<"/[loc
 
   return (
     <div className="container-x max-w-3xl py-12 lg:py-16">
+      <TrackPurchase
+        order={{
+          reference: orderRef(order.number),
+          total: Number(order.total),
+          shipping: Number(order.shippingFee),
+          items: order.items.map((i) => ({ id: i.productId ?? i.id, name: i.name, price: Number(i.unitPrice), qty: i.quantity })),
+        }}
+      />
       <div className="card relative overflow-hidden p-8 text-center sm:p-12">
         <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-sun-400 via-sky-500 to-mint-400" aria-hidden />
         <CheckCircle2 className="mx-auto size-16 text-mint-500 animate-pop" aria-hidden />

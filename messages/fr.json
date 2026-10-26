@@ -25,7 +25,6 @@
     "announcement": "Livraison offerte dès {amount} · Paiement à la livraison"
   },
   "hero": {
-    "badge": "Nouveau : collection Grands Bâtisseurs",
     "title": "Des jeux qui font grandir l'imagination",
     "highlight": "imagination",
     "subtitle": "Tuiles magnétiques, jeux de construction et kits créatifs pour apprendre en s'amusant, de 1 à 12 ans.",
@@ -33,7 +32,8 @@
     "ctaCategories": "Voir les catégories",
     "trustDelivery": "Livraison 24–72 h partout en Tunisie",
     "trustCod": "Paiement à la livraison",
-    "trustSafe": "Matériaux non toxiques"
+    "trustSafe": "Matériaux non toxiques",
+    "sceneLabel": "Des tuiles magnétiques qui construisent un village, une pyramide, une fusée, un château et un pont"
   },
   "home": {
     "categoriesTitle": "Explorez par univers",
@@ -106,7 +106,8 @@
     "viewCart": "Voir le panier",
     "save": "-{percent} %",
     "featured": "Coup de cœur",
-    "image": "Image {index}"
+    "image": "Image {index}",
+    "buyNowShort": "Commander"
   },
   "shop": {
     "title": "La boutique",

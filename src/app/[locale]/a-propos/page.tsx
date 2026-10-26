@@ -21,7 +21,7 @@ export default async function AboutPage() {
     <div className="container-x max-w-5xl py-8 lg:py-12">
       <Breadcrumbs locale={locale} items={[{ name: tn("about"), href: "/a-propos" }]} />
       <div className="relative mt-6 overflow-hidden rounded-[2rem] shadow-soft">
-        <Image src="/brand/banner.webp" alt="KiddoCraft" width={1600} height={608} priority className="w-full" />
+        <Image src="/brand/banner.webp" alt="KiddoCraft" width={1600} height={608} preload className="w-full" />
       </div>
       <div className="mx-auto mt-12 max-w-3xl">
         <h1 className="font-display text-4xl font-bold sm:text-5xl">{t("title")}</h1>

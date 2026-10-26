@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, Banknote, Brain, Heart, ShieldCheck, Sparkles, Truck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Banknote, Brain, ShieldCheck, Truck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { locale as rootLocale } from "next/root-params";
+import { Hero3D } from "@/components/shop/Hero3D";
+import { TileScene } from "@/components/shop/TileScene";
+import { Block3D } from "@/components/ui/Block3D";
 import { PostCard } from "@/components/shop/PostCard";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { FloatingTiles, SectionHeading } from "@/components/ui/Tiles";
@@ -43,7 +46,6 @@ export default async function HomePage() {
     getSettings(),
   ]);
   const products = featured.length >= 4 ? featured : await getProducts(locale, { take: 8 });
-  const heroProduct = products[0];
   const Arrow = locale === "ar" ? ArrowLeft : ArrowRight;
 
   const faq = [1, 2, 3, 4, 5].map((i) => ({
@@ -75,10 +77,7 @@ export default async function HomePage() {
         />
         <div className="container-x relative grid items-center gap-10 py-10 sm:py-14 lg:grid-cols-2 lg:py-20">
           <div className="animate-slide-in">
-            <span className="chip bg-white/80 px-4 py-1.5 text-sm text-sky-700 shadow-sm">
-              <Sparkles className="size-4 text-sun-500" aria-hidden /> {th("badge")}
-            </span>
-            <h1 className="mt-5 font-display text-4xl font-bold leading-[1.1] text-ink sm:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl font-bold leading-[1.1] text-ink sm:text-5xl lg:text-6xl">
               {before}
               <span className="relative whitespace-nowrap text-sky-500">
                 {highlight}
@@ -111,24 +110,24 @@ export default async function HomePage() {
           </div>
 
           {/* Desktop only: on phones the picture pushed the shop below the fold. */}
-          {heroProduct?.image && (
-            <div className="relative mx-auto hidden w-full max-w-md lg:block lg:max-w-lg">
-              <div className="absolute -inset-4 rotate-3 rounded-[2.5rem] bg-sun-400/90" aria-hidden />
-              <div className="absolute -inset-4 -rotate-2 rounded-[2.5rem] bg-sky-500/90" aria-hidden />
-              <Link href={`/produit/${locale === "ar" ? heroProduct.slugAr : heroProduct.slugFr}`} className="relative block overflow-hidden rounded-[2rem] bg-white shadow-soft">
-                <Image src={heroProduct.image} alt={heroProduct.imageAlt} width={800} height={800} priority sizes="(min-width: 1024px) 512px, 90vw" className="aspect-square w-full object-cover" />
-              </Link>
-              <div className="absolute -bottom-6 start-4 card flex items-center gap-3 px-4 py-3 sm:-start-6">
-                <span className="grid size-10 place-items-center rounded-full bg-coral-100 text-coral-500">
-                  <Heart className="size-5 fill-current" aria-hidden />
-                </span>
-                <div className="leading-tight">
-                  <p className="font-display font-semibold">{heroProduct.name}</p>
-                  <p className="font-display font-bold text-sky-600">{formatPrice(heroProduct.price, locale)}</p>
-                </div>
-              </div>
+          <Hero3D className="relative mx-auto hidden w-full max-w-md lg:block lg:max-w-lg">
+            {/* Back to front: frames behind the tile scene, loose tiles in front of it. */}
+            <div className="absolute -inset-4 rotate-3 rounded-[2.5rem] bg-sun-400/90 [transform:translateZ(-70px)]" aria-hidden />
+            <div className="absolute -inset-4 -rotate-2 rounded-[2.5rem] bg-sky-500/90 [transform:translateZ(-35px)]" aria-hidden />
+            <div className="relative overflow-hidden rounded-[2rem] bg-white shadow-soft [transform:translateZ(0)]">
+              <TileScene label={th("sceneLabel")} />
+              <span className="hero-3d-glare" aria-hidden />
             </div>
-          )}
+            <span className="hero-3d-pop absolute -end-6 top-10 size-14 [--r:12deg] [--w:3.5rem] [--z:110px]">
+              <Block3D kind="cube" color="sun" />
+            </span>
+            <span className="hero-3d-pop absolute -start-7 top-1/3 size-10 [--r:-15deg] [--w:2.5rem] [--z:140px] [animation-delay:-2s]">
+              <Block3D kind="prism" color="coral" />
+            </span>
+            <span className="hero-3d-pop absolute -bottom-4 end-16 size-9 [--r:20deg] [--w:2.25rem] [--z:90px] [animation-delay:-4s]">
+              <Block3D kind="cube" color="mint" />
+            </span>
+          </Hero3D>
         </div>
       </section>
 

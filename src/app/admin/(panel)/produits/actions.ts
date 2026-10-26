@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { bool, files, int, money, resolveSlug, revalidateStore, str, type FormState } from "@/lib/admin";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { sanitizeRichText } from "@/lib/richtext";
 import { deleteImage, saveImage } from "@/lib/uploads";
 
 /** Creates (id = null) or updates a product, its photos included. */
@@ -37,8 +38,10 @@ export async function saveProduct(id: string | null, _prev: FormState, fd: FormD
     slugAr: slugAr.slug,
     shortDescFr: str(fd, "shortDescFr"),
     shortDescAr: str(fd, "shortDescAr"),
-    descFr: str(fd, "descFr"),
-    descAr: str(fd, "descAr"),
+    descFr: sanitizeRichText(str(fd, "descFr")),
+    descAr: sanitizeRichText(str(fd, "descAr")),
+    focusKeywordFr: str(fd, "focusKeywordFr"),
+    focusKeywordAr: str(fd, "focusKeywordAr"),
     metaTitleFr: str(fd, "metaTitleFr"),
     metaTitleAr: str(fd, "metaTitleAr"),
     metaDescFr: str(fd, "metaDescFr"),

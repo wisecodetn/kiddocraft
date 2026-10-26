@@ -5,9 +5,10 @@ import type { Locale } from "@/i18n/locales";
 import type { BlogPost } from "@/generated/prisma/client";
 import { formatDate } from "@/lib/format";
 import { slugOf, t as tr } from "@/lib/localize";
+import { richTextPlain } from "@/lib/richtext";
 
-export function readingMinutes(text: string) {
-  return Math.max(1, Math.round(text.split(/\s+/).length / 200));
+export function readingMinutes(content: string) {
+  return Math.max(1, Math.round(richTextPlain(content).split(/\s+/).length / 200));
 }
 
 export async function PostCard({ post, locale }: { post: BlogPost; locale: Locale }) {
